@@ -9,15 +9,23 @@
  */
 class ValidateBinarySearchTree {
     
-    private boolean help(TreeNode p, Integer low, Integer high) {
-    
-        if (p == null) return true;
-        return (low == null || p.val > low) && (high == null || p.val < high) && help(p.left, low, p.val) && help(p.right, p.val, high);
+     public boolean isValidBST(TreeNode root) {
+        
+        if(root == null) return true;
+        
+        return validation(root, null, null); 
+         
     }
     
-    public boolean isValidBST(TreeNode root) {
+    
+    public boolean validation(TreeNode focusedNode, TreeNode lowerLimit, TreeNode upperLimit) {
         
-        return help(root, null, null);
+        if(focusedNode == null) return true;
         
+        if(lowerLimit != null && focusedNode.val <= lowerLimit.val) return false;
+        
+        if(upperLimit != null && focusedNode.val >= upperLimit.val) return false;
+        
+        return validation(focusedNode.left, lowerLimit, focusedNode) && validation(focusedNode.right, focusedNode, upperLimit);  
     }
 }
