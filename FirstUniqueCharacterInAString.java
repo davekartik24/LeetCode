@@ -3,18 +3,20 @@
 class FirstUniqueCharacterInAString {
     public int firstUniqChar(String s) {
         
-        int alphaString[] = new int[26];
+        int[] lookup = new int[26];
+        char[] input = s.toCharArray();
+        int length = s.length();
         
-        char[] inputString = s.toCharArray();
-        
-        for(char element : inputString) {
+        for(int i = 0; i < length; i++) {
             
-           alphaString[element - 'a']++; 
+            lookup[input[i] - 'a']++;
         }
         
-        for(char element : inputString) {
+        for(int i = 0; i < length; i++) {
             
-            if(alphaString[element - 'a'] == 1) return s.indexOf(element);
+            if(lookup[input[i] - 'a'] == 1) {
+                return i;
+            }
         }
         
         return -1;

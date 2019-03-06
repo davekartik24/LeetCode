@@ -9,71 +9,76 @@
 class Solution {
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
         
-        if(l1 == null) return l2;
-        if(l2 == null) return l1;
+        ListNode focusedNode1 = l1;
+        int length1 = 0;
+        int length2 = 0;
+        ListNode focusedNode2 = l2;
+        
+        while(focusedNode1 != null) {
+            length1++;
+            focusedNode1 = focusedNode1.next;
+        }
+        
+        while(focusedNode2 != null) {
+            length2++;
+            focusedNode2 = focusedNode2.next;
+        }
+        
+        if(length1 == 0 && length2 == 0) return null;
+        
+        if(length1 >= length2) {
+            focusedNode1 = l1;
+            focusedNode2 = l2;
+        } else {
+            focusedNode1 = l2;
+            focusedNode2 = l1;
+        }
+        
+        ListNode newList = null;
+        ListNode resultRoot = null;
         
         int carry = 0;
-        int sum = 0;
         
-        sum = l1.val + l2.val + carry;
+        while(focusedNode2 != null) {
+            int value = focusedNode1.val + focusedNode2.val;
+            int toAdd = (value + carry) % 10;
+
+            if(newList == null) {
+                newList = new ListNode(toAdd);
+                resultRoot = newList;
+            } else {       
+                ListNode actualNode = new ListNode(toAdd);
+                newList.next = actualNode;
+                newList = actualNode;
+            }
             
-        carry = sum / 10;
-        
-        ListNode finalResultHead = new ListNode(sum % 10);
-        ListNode focusedNode = finalResultHead;
-        
-        l1 = l1.next;
-        l2 = l2.next;
-        
-        
-        while(l1 != null && l2 != null) {
+            focusedNode1 = focusedNode1.next;
+            focusedNode2 = focusedNode2.next;
             
-            sum = l1.val + l2.val + carry;
+            carry = (value + carry) / 10;
             
-            carry = sum / 10;
-             
-            focusedNode.next = new ListNode(sum % 10);
-            focusedNode = focusedNode.next;
-            
-            l1 = l1.next;
-            l2 = l2.next;
             
         }
         
-        if(l1 == null) {
+        while(focusedNode1 != null) {
+            int value = focusedNode1.val;
+            int toAdd = (value + carry) % 10;
             
-            while(l2 != null && carry != 0) {
-                
-                sum = l2.val + carry;
-                carry = sum / 10;
-                
-                focusedNode.next = new ListNode(sum % 10);
-                focusedNode = focusedNode.next;
-                
-                l2 = l2.next;
-                
-            }
-        } else if(l2 == null) {
+            ListNode actualNode = new ListNode(toAdd);
+            newList.next = actualNode;
+            newList = actualNode;
             
-            while(l1 != null && carry != 0) {
-                
-                sum = l1.val + carry;
-                carry = sum / 10;
-                
-                focusedNode.next = new ListNode(sum % 10);
-                focusedNode = focusedNode.next;
-                
-                l1 = l1.next;
-            }
+            carry = (value + carry) / 10;
+            focusedNode1 = focusedNode1.next;
+            
         }
         
-        if(carry != 0) focusedNode.next = new ListNode(carry);
-        
-        if(l1 != null) focusedNode.next = l1;
-        
-        if(l2 != null) focusedNode.next = l2;
-        
-        return finalResultHead;
+        if(carry != 0) {
+            ListNode actualNode = new ListNode(carry);
+            newList.next = actualNode;
+        }
+         
+        return resultRoot;
          
     }
             
